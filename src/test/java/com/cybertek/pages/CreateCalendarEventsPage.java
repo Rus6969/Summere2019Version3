@@ -49,6 +49,12 @@ public class CreateCalendarEventsPage extends BasePage {
     @FindBy(xpath = "(//input[@type='radio'])[5]")
     public WebElement by;
 
+    @FindBy(xpath = "//a[@title='Cancel']")
+    public WebElement cancel;
+
+    @FindBy(css = "h1[class='oro-subtitle']")
+    public WebElement AllCalendarEventSubtitle;
+
     public Select repeatOptionsList(){
         return new Select(repeatOptions);
     }
