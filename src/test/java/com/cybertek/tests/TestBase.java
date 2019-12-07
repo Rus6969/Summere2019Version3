@@ -49,7 +49,7 @@ public abstract class TestBase {
     public void setupMethod() {
         driver = Driver.get();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        url = ConfigurationReader.get("url");
+        url = ConfigurationReader.get("url2");
         driver.get(url);
         actions = new Actions(driver);
         driver.manage().window().maximize();
@@ -73,8 +73,8 @@ public abstract class TestBase {
 
 
         // CLOSE BROWSER
-        Thread.sleep(1000);
-        Driver.closeDriver();
+//        Thread.sleep(1000);
+//        Driver.closeDriver();
     }
 
 
