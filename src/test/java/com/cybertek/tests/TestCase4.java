@@ -10,6 +10,9 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,8 +57,13 @@ public class TestCase4 extends TestBase {
         calendarEventsPage.Delete.isDisplayed();
         extentLogger.info("Button View is displayed");
         calendarEventsPage.View.isDisplayed();
-        Assert.assertTrue(calendarEventsPage.title.isDisplayed());
-
+//
+////        Assert.assertTrue(calendarEventsPage.Edit.isDisplayed());
+////        Assert.assertTrue(calendarEventsPage.Delete.isDisplayed());
+////        Assert.assertTrue(calendarEventsPage.View.isDisplayed());
+//          Assert.assertEquals(calendarEventsPage.Edit.getText(),"Edit");
+//          Assert.assertEquals(calendarEventsPage.View.getText(), "View");
+//          Assert.assertEquals(calendarEventsPage.Delete.getText(),"Delete");
 
 //        List<WebElement> actualWebElemetns = driver.findElements(By.xpath("//tbody//tr[14]//td[9]//ul//li//ul//li//a[@title='Edit']"));
 //        List<String>actual = new ArrayList<>() ;
@@ -107,32 +115,32 @@ public class TestCase4 extends TestBase {
 
     }
 
-   @Test
-    public void VerifyallPageSubtitlesAreDisplayed(){
-       // create a report test
-       extentLogger = report.createTest("Verify that “All Calendar Events” page subtitle is displayed");
-       extentLogger.info("Log in under store manager");
-       LoginPage loginPage = new LoginPage();
+    @Test
+    public void VerifyallPageSubtitlesAreDisplayed() {
+        // create a report test
+        extentLogger = report.createTest("Verify that “All Calendar Events” page subtitle is displayed");
+        extentLogger.info("Log in under store manager");
+        LoginPage loginPage = new LoginPage();
 
-       String username = ConfigurationReader.get("store_manager_username");
-       String password = ConfigurationReader.get("store_manager_password");
-       extentLogger.info("username: " + username);
-       extentLogger.info("password: " + password);
-       loginPage.login(username, password);
-
-
-       DashboardPage dashboardPage = new DashboardPage();
-
-       extentLogger.info("Go to Calaendar events ");
-       dashboardPage.navigateToModule("Activities", "Calendar Events");
+        String username = ConfigurationReader.get("store_manager_username");
+        String password = ConfigurationReader.get("store_manager_password");
+        extentLogger.info("username: " + username);
+        extentLogger.info("password: " + password);
+        loginPage.login(username, password);
 
 
-       CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
+        DashboardPage dashboardPage = new DashboardPage();
 
-       extentLogger.info("Wait Loading element dissapear");
-       calendarEventsPage.waitUntilLoaderScreenDisappear();
+        extentLogger.info("Go to Calaendar events ");
+        dashboardPage.navigateToModule("Activities", "Calendar Events");
 
-       CreateCalendarEventsPage createCalendarEventsPage=new CreateCalendarEventsPage();
+
+        CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
+
+        extentLogger.info("Wait Loading element dissapear");
+        calendarEventsPage.waitUntilLoaderScreenDisappear();
+
+        CreateCalendarEventsPage createCalendarEventsPage = new CreateCalendarEventsPage();
         extentLogger.info("click on create create a calendar event");
         calendarEventsPage.createCalendarEvent.click();
 
@@ -140,22 +148,60 @@ public class TestCase4 extends TestBase {
         createCalendarEventsPage.waitUntilLoaderScreenDisappear();
 
         extentLogger.info("click on cancel button");
-         createCalendarEventsPage.cancel.click();
+        createCalendarEventsPage.cancel.click();
 
-       extentLogger.info("Wait Loading element dissapear");
-       createCalendarEventsPage.waitUntilLoaderScreenDisappear();
+        extentLogger.info("Wait Loading element dissapear");
+        createCalendarEventsPage.waitUntilLoaderScreenDisappear();
 
-       extentLogger.info("Verify Page Subtitle is displayed");
+        extentLogger.info("Verify Page Subtitle is displayed");
 
-       Assert.assertTrue(createCalendarEventsPage.AllCalendarEventSubtitle.isDisplayed());
+        Assert.assertTrue(createCalendarEventsPage.AllCalendarEventSubtitle.isDisplayed());
+
+    }
+
+    @Test
+    public void VerifyTimeDifferenceInOneHour() throws InterruptedException, ParseException {
+        // create a report test
+        extentLogger = report.createTest("Verify 1 hour difference between start and end time");
+        extentLogger.info("Log in under store manager");
+        LoginPage loginPage = new LoginPage();
+
+        String username = ConfigurationReader.get("store_manager_username");
+        String password = ConfigurationReader.get("store_manager_password");
+        extentLogger.info("username: " + username);
+        extentLogger.info("password: " + password);
+        loginPage.login(username, password);
 
 
+        DashboardPage dashboardPage = new DashboardPage();
+
+        extentLogger.info("Go to Calaendar events ");
+        dashboardPage.navigateToModule("Activities", "Calendar Events");
 
 
+        CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
+
+        extentLogger.info("Wait Loading element dissapear");
+        calendarEventsPage.waitUntilLoaderScreenDisappear();
+
+        CreateCalendarEventsPage createCalendarEventsPage = new CreateCalendarEventsPage();
+        extentLogger.info("click on create create a calendar event");
+        calendarEventsPage.createCalendarEvent.click();
+
+        extentLogger.info("Wait Loading element dissapear");
+        createCalendarEventsPage.waitUntilLoaderScreenDisappear();
+
+        extentLogger.info("get a start time");
+        createCalendarEventsPage.startTime.click();
+
+         extentLogger.info(" get value in start time ");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a");
 
 
+         String start= createCalendarEventsPage.startTime.getAttribute("value");
+         System.out.println(start);
 
-
-
-   }
+//        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a");
+//        System.out.println(sdf.parse(createCalendarEventsPage.startTime.getText()));
+    }
 }

@@ -73,8 +73,8 @@ public abstract class TestBase {
 
 
         // CLOSE BROWSER
-        Thread.sleep(1000);
-        Driver.closeDriver();
+//        Thread.sleep(1000);
+//        Driver.closeDriver();
     }
 
 

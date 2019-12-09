@@ -32,7 +32,7 @@ public class CalendarEventsPage extends BasePage {
     @FindBy(xpath= "//tbody//tr//td[@class='visibility-cell']")
     public WebElement SixGridOptions;
 
-    @FindBy(xpath = "//tbody//tr//td//label[@for='column-c4028']")
+    @FindBy(xpath = "//tbody//tr//td[@class='title-cell']")
     public  WebElement title;
 
 
