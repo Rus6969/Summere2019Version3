@@ -4,8 +4,10 @@ import com.cybertek.pages.CalendarEventsPage;
 import com.cybertek.pages.CreateCalendarEventsPage;
 import com.cybertek.pages.DashboardPage;
 import com.cybertek.pages.LoginPage;
+import com.cybertek.utilities.BrowserUtils;
 import com.cybertek.utilities.ConfigurationReader;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -194,14 +196,159 @@ public class TestCase4 extends TestBase {
         extentLogger.info("get a start time");
         createCalendarEventsPage.startTime.click();
 
-         extentLogger.info(" get value in start time ");
+
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a");
 
+        extentLogger.info(" get value in start time ");
+        String start = createCalendarEventsPage.startTime.getAttribute("value");
+        System.out.println("start = " + start);
 
-         String start= createCalendarEventsPage.startTime.getAttribute("value");
-         System.out.println(start);
+        extentLogger.info("get value in end time");
+        String end = createCalendarEventsPage.endTime.getAttribute("value");
+        System.out.println("end = " + end);
+        /*
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a");
+//.parse helps us to convert string to actual time and getTime() method returns us time in milliseconds
+//thats why we can use divided in milliseconds
+//or basicly minus the meeting end time from start time
+long elapsed = (sdf.parse(second).getTime() / 3600000) - (sdf.parse(first).getTime() / 3600000);
+//System.out.println(elapsed/3600000);
+Assert.assertEquals(elapsed, 1);
+         */
+        long difference =(sdf.parse(end).getTime()/3600000)-(sdf.parse(start).getTime()/3600000);
+        System.out.println("difference = " + difference);
+        extentLogger.info("Verify difference in one hour");
+        Assert.assertEquals(difference,1);
 
-//        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a");
-//        System.out.println(sdf.parse(createCalendarEventsPage.startTime.getText()));
     }
+
+    @Test
+    public void ChooseAndVerifyTime(){
+        // needs for scrolling down a page .
+       // JavascriptExecutor js =(JavascriptExecutor) driver;
+
+        extentLogger = report.createTest("Choose start time 9 and Verify that end time is 10");
+        extentLogger.info("Log in under store manager");
+        LoginPage loginPage = new LoginPage();
+
+        String username = ConfigurationReader.get("store_manager_username");
+        String password = ConfigurationReader.get("store_manager_password");
+        extentLogger.info("username: " + username);
+        extentLogger.info("password: " + password);
+        loginPage.login(username, password);
+
+        DashboardPage dashboardPage = new DashboardPage();
+
+        extentLogger.info("Go to Calaendar events ");
+        dashboardPage.navigateToModule("Activities", "Calendar Events");
+
+        CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
+
+        extentLogger.info("Wait Loading element dissapear");
+        calendarEventsPage.waitUntilLoaderScreenDisappear();
+
+        CreateCalendarEventsPage createCalendarEventsPage = new CreateCalendarEventsPage();
+        extentLogger.info("click on create create a calendar event");
+        calendarEventsPage.createCalendarEvent.click();
+
+        extentLogger.info("Wait Loading element dissapear");
+        createCalendarEventsPage.waitUntilLoaderScreenDisappear();
+
+        extentLogger.info("click on start time");
+        createCalendarEventsPage.startTime.click();
+
+        extentLogger.info("choose 9 PM");
+        createCalendarEventsPage.NinePM.click();
+
+        extentLogger.info(" get time from end time ");
+        createCalendarEventsPage.endTime.getAttribute("value");
+        System.out.println(createCalendarEventsPage.endTime.getAttribute("value"));
+
+        extentLogger.info("Verify time equal 10:00 PM");
+
+        Assert.assertEquals(createCalendarEventsPage.endTime.getAttribute("value"),"10:00 PM");
+
+
+    }
+      @Test
+    public void AllDayEventDisplayed(){
+          extentLogger = report.createTest("Choose start time 9 and Verify that end time is 10");
+          extentLogger.info("Log in under store manager");
+          LoginPage loginPage = new LoginPage();
+
+          String username = ConfigurationReader.get("store_manager_username");
+          String password = ConfigurationReader.get("store_manager_password");
+          extentLogger.info("username: " + username);
+          extentLogger.info("password: " + password);
+          loginPage.login(username, password);
+
+          DashboardPage dashboardPage = new DashboardPage();
+
+          extentLogger.info("Go to Calaendar events ");
+          dashboardPage.navigateToModule("Activities", "Calendar Events");
+
+          CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
+
+          extentLogger.info("Wait Loading element dissapear");
+          calendarEventsPage.waitUntilLoaderScreenDisappear();
+
+          CreateCalendarEventsPage createCalendarEventsPage = new CreateCalendarEventsPage();
+          extentLogger.info("click on create create a calendar event");
+          calendarEventsPage.createCalendarEvent.click();
+
+          extentLogger.info("Wait Loading element dissapear");
+          createCalendarEventsPage.waitUntilLoaderScreenDisappear();
+
+          extentLogger.info("click on All Day Event checkBox");
+          createCalendarEventsPage.AllDayEvent.click();
+          BrowserUtils.waitFor(3);
+          extentLogger.info("Check that start time IS not Displayed");
+          Assert.assertFalse(createCalendarEventsPage.startTime.isDisplayed());
+          extentLogger.info("Check that end time IS not Displayed");
+          Assert.assertFalse(createCalendarEventsPage.endTime.isDisplayed());
+
+      }
+
+       @Test
+      public void RepeatDropDown(){
+           extentLogger = report.createTest("Choose start time 9 and Verify that end time is 10");
+           extentLogger.info("Log in under store manager");
+           LoginPage loginPage = new LoginPage();
+
+           String username = ConfigurationReader.get("store_manager_username");
+           String password = ConfigurationReader.get("store_manager_password");
+           extentLogger.info("username: " + username);
+           extentLogger.info("password: " + password);
+           loginPage.login(username, password);
+
+           DashboardPage dashboardPage = new DashboardPage();
+
+           extentLogger.info("Go to Calaendar events ");
+           dashboardPage.navigateToModule("Activities", "Calendar Events");
+
+           CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
+
+           extentLogger.info("Wait Loading element dissapear");
+           calendarEventsPage.waitUntilLoaderScreenDisappear();
+
+           CreateCalendarEventsPage createCalendarEventsPage = new CreateCalendarEventsPage();
+           extentLogger.info("click on create create a calendar event");
+           calendarEventsPage.createCalendarEvent.click();
+
+           extentLogger.info("Wait Loading element dissapear");
+           createCalendarEventsPage.waitUntilLoaderScreenDisappear();
+           extentLogger.info("click on repeat button");
+           createCalendarEventsPage.repeat.click();
+           extentLogger.info("Verify that repeat option is selected ");
+           Assert.assertTrue(createCalendarEventsPage.repeat.isSelected());
+
+           extentLogger.info("Verify that 'daily' is selected by default in Repeats");
+           Assert.assertEquals(createCalendarEventsPage.daily.getAttribute("value"),"daily");
+
+            extentLogger.info("Verify that  following options are available undre repeats");
+            createCalendarEventsPage.daily.click();
+
+
+       }
+
 }

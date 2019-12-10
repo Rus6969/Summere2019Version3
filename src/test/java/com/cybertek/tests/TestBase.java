@@ -26,6 +26,7 @@ public abstract class TestBase {
     protected ExtentTest extentLogger;
 
     @BeforeTest
+
     public void setUpTest() {
         report = new ExtentReports();
         String path = System.getProperty("user.dir") + "/test-output/report.html";
@@ -46,7 +47,15 @@ public abstract class TestBase {
     }
 
     @BeforeMethod
-    public void setupMethod() {
+    @Parameters("env")
+    public void setupMethod(@Optional  String env) {
+        System.out.println("env = " + env);
+        // if env is null use default url if not use based on value
+        if(env==null){
+            url=ConfigurationReader.get("url");
+        }else{
+            url=ConfigurationReader.get(env+"_url");
+        }
         driver = Driver.get();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         url = ConfigurationReader.get("url2");
@@ -54,7 +63,28 @@ public abstract class TestBase {
         actions = new Actions(driver);
         driver.manage().window().maximize();
     }
+/*
+ @BeforeMethod
+    @Parameters("env")
+    public void setupMethod(@Optional String env) {
+        System.out.println("env = " + env);
+        // ENV IS null use default url,
+        // if ENV is not null, get the url based on env
+        if (env == null) {
+            url = ConfigurationReader.get("url");
+        } else {
+            url = ConfigurationReader.get(env+"_url");
+        }
 
+        driver = Driver.get();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+        actions = new Actions(driver);
+        driver.manage().window().maximize();
+        driver.get(url);
+    }
+
+ */
     @AfterMethod
     public void teardown(ITestResult result) throws InterruptedException, IOException {
         // IF FAILED TAKE SCREENSHOT

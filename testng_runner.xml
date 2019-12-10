@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Vytrac auto" verbose="10">
+    <!-- How to run specific test-->
+    <test name="Vytrack smoke test">
+        <classes>
+            <class name="com.cybertek.tests.d16_pom_2.RepeatOptionsTest">
+                <methods>
+                    <include name="radioRepeatEveryReadioButtonsTest"/>
+                    <exclude name="repeatOptionsTest"/>
+
+                </methods>
+            </class>
+            
+        </classes>
+    </test>
+</suite>

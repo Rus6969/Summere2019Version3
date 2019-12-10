@@ -17,6 +17,7 @@ public class CreateCalendarEventsPage extends BasePage {
 
     @FindBy(css = "[id^='recurrence-repeats-view']")
     public WebElement repeatOptions;
+
     @FindBy(className = "select2-chosen")
     public WebElement selectedOwner;
 
@@ -33,6 +34,12 @@ public class CreateCalendarEventsPage extends BasePage {
 
     @FindBy(css = "[id^='time_selector_oro_calendar_event_form_end']")
     public WebElement endTime;
+
+    @FindBy(xpath = "//li[@class='ui-timepicker-pm'][19]")
+    public WebElement NinePM;
+
+    @FindBy(xpath = "//li[@class='ui-timepicker-pm'][20]")
+    public WebElement TenPM;
 
     @FindBy(xpath = "(//input[@type='radio'])[1]")
     public WebElement days;
@@ -54,6 +61,16 @@ public class CreateCalendarEventsPage extends BasePage {
 
     @FindBy(css = "h1[class='oro-subtitle']")
     public WebElement AllCalendarEventSubtitle;
+
+    @FindBy(xpath = "//label[contains(text(),'All-day event')]")
+    public WebElement AllDayEvent;
+
+    @FindBy(xpath = "//div//label[@for='recurrence-repeat-view1196'")
+    public WebElement repeat2;
+
+    @FindBy(id = "recurrence-repeats-view1196")
+    public WebElement daily;
+
 
     public Select repeatOptionsList(){
         return new Select(repeatOptions);
