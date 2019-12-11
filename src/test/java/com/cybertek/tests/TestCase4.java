@@ -9,15 +9,20 @@ import com.cybertek.utilities.ConfigurationReader;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import static java.util.Arrays.*;
 
 public class TestCase4 extends TestBase {
 
@@ -215,17 +220,17 @@ long elapsed = (sdf.parse(second).getTime() / 3600000) - (sdf.parse(first).getTi
 //System.out.println(elapsed/3600000);
 Assert.assertEquals(elapsed, 1);
          */
-        long difference =(sdf.parse(end).getTime()/3600000)-(sdf.parse(start).getTime()/3600000);
+        long difference = (sdf.parse(end).getTime() / 3600000) - (sdf.parse(start).getTime() / 3600000);
         System.out.println("difference = " + difference);
         extentLogger.info("Verify difference in one hour");
-        Assert.assertEquals(difference,1);
+        Assert.assertEquals(difference, 1);
 
     }
 
     @Test
-    public void ChooseAndVerifyTime(){
+    public void ChooseAndVerifyTime() {
         // needs for scrolling down a page .
-       // JavascriptExecutor js =(JavascriptExecutor) driver;
+        // JavascriptExecutor js =(JavascriptExecutor) driver;
 
         extentLogger = report.createTest("Choose start time 9 and Verify that end time is 10");
         extentLogger.info("Log in under store manager");
@@ -266,89 +271,319 @@ Assert.assertEquals(elapsed, 1);
 
         extentLogger.info("Verify time equal 10:00 PM");
 
-        Assert.assertEquals(createCalendarEventsPage.endTime.getAttribute("value"),"10:00 PM");
+        Assert.assertEquals(createCalendarEventsPage.endTime.getAttribute("value"), "10:00 PM");
 
 
     }
-      @Test
-    public void AllDayEventDisplayed(){
-          extentLogger = report.createTest("Choose start time 9 and Verify that end time is 10");
-          extentLogger.info("Log in under store manager");
-          LoginPage loginPage = new LoginPage();
 
-          String username = ConfigurationReader.get("store_manager_username");
-          String password = ConfigurationReader.get("store_manager_password");
-          extentLogger.info("username: " + username);
-          extentLogger.info("password: " + password);
-          loginPage.login(username, password);
+    @Test
+    public void AllDayEventDisplayed() {
+        extentLogger = report.createTest("Choose start time 9 and Verify that end time is 10");
+        extentLogger.info("Log in under store manager");
+        LoginPage loginPage = new LoginPage();
 
-          DashboardPage dashboardPage = new DashboardPage();
+        String username = ConfigurationReader.get("store_manager_username");
+        String password = ConfigurationReader.get("store_manager_password");
+        extentLogger.info("username: " + username);
+        extentLogger.info("password: " + password);
+        loginPage.login(username, password);
 
-          extentLogger.info("Go to Calaendar events ");
-          dashboardPage.navigateToModule("Activities", "Calendar Events");
+        DashboardPage dashboardPage = new DashboardPage();
 
-          CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
+        extentLogger.info("Go to Calaendar events ");
+        dashboardPage.navigateToModule("Activities", "Calendar Events");
 
-          extentLogger.info("Wait Loading element dissapear");
-          calendarEventsPage.waitUntilLoaderScreenDisappear();
+        CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
 
-          CreateCalendarEventsPage createCalendarEventsPage = new CreateCalendarEventsPage();
-          extentLogger.info("click on create create a calendar event");
-          calendarEventsPage.createCalendarEvent.click();
+        extentLogger.info("Wait Loading element dissapear");
+        calendarEventsPage.waitUntilLoaderScreenDisappear();
 
-          extentLogger.info("Wait Loading element dissapear");
-          createCalendarEventsPage.waitUntilLoaderScreenDisappear();
+        CreateCalendarEventsPage createCalendarEventsPage = new CreateCalendarEventsPage();
+        extentLogger.info("click on create create a calendar event");
+        calendarEventsPage.createCalendarEvent.click();
 
-          extentLogger.info("click on All Day Event checkBox");
-          createCalendarEventsPage.AllDayEvent.click();
-          BrowserUtils.waitFor(3);
-          extentLogger.info("Check that start time IS not Displayed");
-          Assert.assertFalse(createCalendarEventsPage.startTime.isDisplayed());
-          extentLogger.info("Check that end time IS not Displayed");
-          Assert.assertFalse(createCalendarEventsPage.endTime.isDisplayed());
+        extentLogger.info("Wait Loading element dissapear");
+        createCalendarEventsPage.waitUntilLoaderScreenDisappear();
 
-      }
+        extentLogger.info("click on All Day Event checkBox");
+        createCalendarEventsPage.AllDayEvent.click();
+        BrowserUtils.waitFor(3);
+        extentLogger.info("Check that start time IS not Displayed");
+        Assert.assertFalse(createCalendarEventsPage.startTime.isDisplayed());
+        extentLogger.info("Check that end time IS not Displayed");
+        Assert.assertFalse(createCalendarEventsPage.endTime.isDisplayed());
 
-       @Test
-      public void RepeatDropDown(){
-           extentLogger = report.createTest("Choose start time 9 and Verify that end time is 10");
-           extentLogger.info("Log in under store manager");
-           LoginPage loginPage = new LoginPage();
+    }
 
-           String username = ConfigurationReader.get("store_manager_username");
-           String password = ConfigurationReader.get("store_manager_password");
-           extentLogger.info("username: " + username);
-           extentLogger.info("password: " + password);
-           loginPage.login(username, password);
+    @Test
+    public void RepeatDropDown() {
+        extentLogger = report.createTest("Verify that “Daily” is selected by default and\n" +
+                "following options are available in \u2028 “Repeats” drop-down:");
+        extentLogger.info("Log in under store manager");
+        LoginPage loginPage = new LoginPage();
 
-           DashboardPage dashboardPage = new DashboardPage();
+        String username = ConfigurationReader.get("store_manager_username");
+        String password = ConfigurationReader.get("store_manager_password");
+        extentLogger.info("username: " + username);
+        extentLogger.info("password: " + password);
+        loginPage.login(username, password);
 
-           extentLogger.info("Go to Calaendar events ");
-           dashboardPage.navigateToModule("Activities", "Calendar Events");
+        DashboardPage dashboardPage = new DashboardPage();
 
-           CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
+        extentLogger.info("Go to Calaendar events ");
+        dashboardPage.navigateToModule("Activities", "Calendar Events");
 
-           extentLogger.info("Wait Loading element dissapear");
-           calendarEventsPage.waitUntilLoaderScreenDisappear();
+        CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
 
-           CreateCalendarEventsPage createCalendarEventsPage = new CreateCalendarEventsPage();
-           extentLogger.info("click on create create a calendar event");
-           calendarEventsPage.createCalendarEvent.click();
+        extentLogger.info("Wait Loading element dissapear");
+        calendarEventsPage.waitUntilLoaderScreenDisappear();
 
-           extentLogger.info("Wait Loading element dissapear");
-           createCalendarEventsPage.waitUntilLoaderScreenDisappear();
-           extentLogger.info("click on repeat button");
-           createCalendarEventsPage.repeat.click();
-           extentLogger.info("Verify that repeat option is selected ");
-           Assert.assertTrue(createCalendarEventsPage.repeat.isSelected());
+        CreateCalendarEventsPage createCalendarEventsPage = new CreateCalendarEventsPage();
+        extentLogger.info("click on create create a calendar event");
+        calendarEventsPage.createCalendarEvent.click();
 
-           extentLogger.info("Verify that 'daily' is selected by default in Repeats");
-           Assert.assertEquals(createCalendarEventsPage.daily.getAttribute("value"),"daily");
+        extentLogger.info("Wait Loading element dissapear");
+        createCalendarEventsPage.waitUntilLoaderScreenDisappear();
+        extentLogger.info("click on repeat button");
+        createCalendarEventsPage.repeat.click();
+        BrowserUtils.waitFor(3);
+        extentLogger.info("Verify that repeat option is selected ");
+        Assert.assertTrue(createCalendarEventsPage.repeat.isSelected());
 
-            extentLogger.info("Verify that  following options are available undre repeats");
-            createCalendarEventsPage.daily.click();
+        extentLogger.info("Verify that 'daily' is selected by default in Repeats");
+        Assert.assertEquals(createCalendarEventsPage.daily.getAttribute("value"), "daily");
+
+        extentLogger.info("Verify that  following options are available under repeats");
+        createCalendarEventsPage.daily.click();
+        createCalendarEventsPage.daily.getAttribute("value");
+        System.out.println(createCalendarEventsPage.daily.getAttribute("value"));
+
+        Select DWMY = new Select(createCalendarEventsPage.daily);
+        List<WebElement> option = DWMY.getOptions();
+        List<String> expected = new ArrayList<>(Arrays.asList("Daily", "Weekly", "Monthly", "Yearly"));
+        List<String> str = new ArrayList<>();
+        for (WebElement each : option) {
+            Assert.assertTrue(expected.equals(Collections.singleton(each.getText())));
+
+        }
+
+    }
+
+    // todo here another option of passing thos test
+//        for (WebElement each : option) {
+//            str.add(each.getText());
+//        }
+//        Assert.assertEquals(str,expected);
+
+    @Test
+    public void VerifyRepeatNeverEndsDisplayOrNot() {
+        extentLogger = report.createTest("verify that  Summary: Daily every 1 day is dispayed in summary");
+        extentLogger.info("Log in under store manager");
+        LoginPage loginPage = new LoginPage();
+
+        String username = ConfigurationReader.get("store_manager_username");
+        String password = ConfigurationReader.get("store_manager_password");
+        extentLogger.info("username: " + username);
+        extentLogger.info("password: " + password);
+        loginPage.login(username, password);
+
+        DashboardPage dashboardPage = new DashboardPage();
+
+        extentLogger.info("Go to Calaendar events ");
+        dashboardPage.navigateToModule("Activities", "Calendar Events");
+
+        CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
+
+        extentLogger.info("Wait Loading element dissapear");
+        calendarEventsPage.waitUntilLoaderScreenDisappear();
+
+        CreateCalendarEventsPage createCalendarEventsPage = new CreateCalendarEventsPage();
+        extentLogger.info("click on create create a calendar event");
+        calendarEventsPage.createCalendarEvent.click();
+
+        extentLogger.info("Wait Loading element dissapear");
+        createCalendarEventsPage.waitUntilLoaderScreenDisappear();
+        extentLogger.info("click on repeat button");
+        createCalendarEventsPage.repeat.click();
+        BrowserUtils.waitFor(3);
+        extentLogger.info("Verify that repeat option is selected ");
+        Assert.assertTrue(createCalendarEventsPage.repeat.isSelected());
+
+        extentLogger.info("Verify that Repeat every day option is selected");
+        Assert.assertTrue(createCalendarEventsPage.RepeatEveryDay.isSelected());
 
 
-       }
+        extentLogger.info("Never is selected by default");
+        Assert.assertTrue(createCalendarEventsPage.never.isSelected());
 
+        extentLogger.info(" verify that  Summary: Daily every 1 day is dispayed in summary ");
+        Assert.assertEquals(createCalendarEventsPage.Summary.getText().replace("\n", ""), "Summary:Daily every 1 day");
+
+
+    }
+
+    @Test
+    public void EveryDayAfterTenOccurences() {
+
+        extentLogger = report.createTest("Verify that following message as a summary is\n" +
+                "displayed: “Summary: Daily every 1 day, end after 10 occurrences”");
+        extentLogger.info("Log in under store manager");
+        LoginPage loginPage = new LoginPage();
+
+        String username = ConfigurationReader.get("store_manager_username");
+        String password = ConfigurationReader.get("store_manager_password");
+        extentLogger.info("username: " + username);
+        extentLogger.info("password: " + password);
+        loginPage.login(username, password);
+
+        DashboardPage dashboardPage = new DashboardPage();
+
+        extentLogger.info("Go to Calaendar events ");
+        dashboardPage.navigateToModule("Activities", "Calendar Events");
+
+        CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
+
+        extentLogger.info("Wait Loading element dissapear");
+        calendarEventsPage.waitUntilLoaderScreenDisappear();
+
+        CreateCalendarEventsPage createCalendarEventsPage = new CreateCalendarEventsPage();
+        extentLogger.info("click on create create a calendar event");
+        calendarEventsPage.createCalendarEvent.click();
+
+        extentLogger.info("Wait Loading element dissapear");
+        createCalendarEventsPage.waitUntilLoaderScreenDisappear();
+        extentLogger.info("click on repeat button");
+        createCalendarEventsPage.repeat.click();
+        BrowserUtils.waitFor(2);
+        extentLogger.info("Select after 10 occurancess");
+        createCalendarEventsPage.after.click();
+        BrowserUtils.waitFor(1);
+        extentLogger.info("add 10 occurences");
+        createCalendarEventsPage.occurences.sendKeys("10");
+        createCalendarEventsPage.occurences.submit();
+        BrowserUtils.waitFor(3);
+
+        extentLogger.info("verify that “Summary: Daily every 1 day, end after 10 occurrences” is displayed");
+//        String actual=createCalendarEventsPage.Summary.getText()+ createCalendarEventsPage.occuncesTen.getText();
+//        System.out.println("actual = " + actual);
+//        Assert.assertEquals(actual.replace("\n",""), "Summary: Daily every 1 day, end after 10 occurrences");
+
+        Assert.assertEquals(createCalendarEventsPage.Summary.getText().replace("\n", ""), "Summary:Daily every 1 day, end after 10 occurrences");
+
+    }
+
+    @Test
+    public void ByNov() {
+        extentLogger = report.createTest("Verify that following message as a summary is\n" +
+                "displayed: “Summary: Daily every 1 day, end by Nov 18, 2021”");
+
+        extentLogger.info("Log in under store manager");
+        LoginPage loginPage = new LoginPage();
+
+        String username = ConfigurationReader.get("store_manager_username");
+        String password = ConfigurationReader.get("store_manager_password");
+        extentLogger.info("username: " + username);
+        extentLogger.info("password: " + password);
+        loginPage.login(username, password);
+
+        DashboardPage dashboardPage = new DashboardPage();
+
+        extentLogger.info("Go to Calaendar events ");
+        dashboardPage.navigateToModule("Activities", "Calendar Events");
+
+        CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
+
+        extentLogger.info("Wait Loading element dissapear");
+        calendarEventsPage.waitUntilLoaderScreenDisappear();
+
+        CreateCalendarEventsPage createCalendarEventsPage = new CreateCalendarEventsPage();
+        extentLogger.info("click on create create a calendar event");
+        calendarEventsPage.createCalendarEvent.click();
+
+        extentLogger.info("Wait Loading element dissapear");
+        createCalendarEventsPage.waitUntilLoaderScreenDisappear();
+        extentLogger.info("click on repeat button");
+        createCalendarEventsPage.repeat.click();
+        BrowserUtils.waitFor(2);
+
+        extentLogger.info("click on opiton 'by'");
+        createCalendarEventsPage.by.click();
+        extentLogger.info("click on choose date");
+        createCalendarEventsPage.ChooseDate.click();
+
+        extentLogger.info("choose 2021 year");
+        Select year = new Select(createCalendarEventsPage.YearPick);
+        year.selectByValue("2021");
+
+        extentLogger.info("Choose November");
+        Select month = new Select(createCalendarEventsPage.MonthPick);
+        month.selectByValue("10");
+
+        extentLogger.info("choose the date 18");
+        createCalendarEventsPage.DayPick.click();
+        BrowserUtils.waitFor(2);
+        Assert.assertEquals(createCalendarEventsPage.Summary.getText().replace("\n", ""), "Summary:Daily every 1 day, end by Nov 18, 2021");
+
+    }
+
+    @Test
+    public void WeeklyeveryWeek(){
+        extentLogger = report.createTest("Summary: Weekly every 1 week on Monday, Friday");
+
+        extentLogger.info("Log in under store manager");
+        LoginPage loginPage = new LoginPage();
+
+        String username = ConfigurationReader.get("store_manager_username");
+        String password = ConfigurationReader.get("store_manager_password");
+        extentLogger.info("username: " + username);
+        extentLogger.info("password: " + password);
+        loginPage.login(username, password);
+
+        DashboardPage dashboardPage = new DashboardPage();
+
+        extentLogger.info("Go to Calaendar events ");
+        dashboardPage.navigateToModule("Activities", "Calendar Events");
+
+        CalendarEventsPage calendarEventsPage = new CalendarEventsPage();
+
+        extentLogger.info("Wait Loading element dissapear");
+        calendarEventsPage.waitUntilLoaderScreenDisappear();
+
+        CreateCalendarEventsPage createCalendarEventsPage = new CreateCalendarEventsPage();
+        extentLogger.info("click on create create a calendar event");
+        calendarEventsPage.createCalendarEvent.click();
+
+        extentLogger.info("Wait Loading element dissapear");
+        createCalendarEventsPage.waitUntilLoaderScreenDisappear();
+        extentLogger.info("click on repeat button");
+        createCalendarEventsPage.repeat.click();
+        BrowserUtils.waitFor(2);
+         extentLogger.info("choose weekly option");
+        Select weekly = new Select(createCalendarEventsPage.repeatOptions);
+        weekly.selectByValue("weekly");
+        BrowserUtils.waitFor(2);
+
+        extentLogger.info("choose Monday Friday");
+        createCalendarEventsPage.MondayPick.click();
+
+        createCalendarEventsPage.FridayPick.click();
+//        Select day = new Select(createCalendarEventsPage.MondayPick);
+//        day.selectByValue("monday");
+
+  Assert.assertEquals(createCalendarEventsPage.Summary.getText().replace("\n",""),"Summary:Weekly every 1 week on Monday, Friday");
+
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+

@@ -13,7 +13,6 @@ import org.testng.annotations.*;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
 public abstract class TestBase {
 
     protected WebDriver driver;
@@ -26,7 +25,6 @@ public abstract class TestBase {
     protected ExtentTest extentLogger;
 
     @BeforeTest
-
     public void setUpTest() {
         report = new ExtentReports();
         String path = System.getProperty("user.dir") + "/test-output/report.html";
@@ -46,25 +44,8 @@ public abstract class TestBase {
         report.flush();
     }
 
+
     @BeforeMethod
-    @Parameters("env")
-    public void setupMethod(@Optional  String env) {
-        System.out.println("env = " + env);
-        // if env is null use default url if not use based on value
-        if(env==null){
-            url=ConfigurationReader.get("url");
-        }else{
-            url=ConfigurationReader.get(env+"_url");
-        }
-        driver = Driver.get();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        url = ConfigurationReader.get("url2");
-        driver.get(url);
-        actions = new Actions(driver);
-        driver.manage().window().maximize();
-    }
-/*
- @BeforeMethod
     @Parameters("env")
     public void setupMethod(@Optional String env) {
         System.out.println("env = " + env);
@@ -84,22 +65,21 @@ public abstract class TestBase {
         driver.get(url);
     }
 
- */
     @AfterMethod
     public void teardown(ITestResult result) throws InterruptedException, IOException {
         // IF FAILED TAKE SCREENSHOT
-         if(result.getStatus() == ITestResult.FAILURE){
-             // record the name of the failed testcase
-             extentLogger.fail(result.getName());
-             // take screenshot and return location of the screenshot
-             String screenshot = BrowserUtils.getScreenshot(result.getName());
-             extentLogger.addScreenCaptureFromPath(screenshot);
-             // capture the exception
-             extentLogger.fail(result.getThrowable());
-         } else if (result.getStatus() == ITestResult.SKIP) {
-             // sometime tests are skipped, this is how we log skipped tests
-             extentLogger.skip("Test Skipped: " + result.getName());
-         }
+        if(result.getStatus() == ITestResult.FAILURE){
+            // record the name of the failed testcase
+            extentLogger.fail(result.getName());
+            // take screenshot and return location of the screenshot
+            String screenshot = BrowserUtils.getScreenshot(result.getName());
+            extentLogger.addScreenCaptureFromPath(screenshot);
+            // capture the exception
+            extentLogger.fail(result.getThrowable());
+        } else if (result.getStatus() == ITestResult.SKIP) {
+            // sometime tests are skipped, this is how we log skipped tests
+            extentLogger.skip("Test Skipped: " + result.getName());
+        }
 
 
         // CLOSE BROWSER

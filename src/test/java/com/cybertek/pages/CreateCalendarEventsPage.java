@@ -53,6 +53,9 @@ public class CreateCalendarEventsPage extends BasePage {
     @FindBy(xpath = "(//input[@type='radio'])[4]")
     public WebElement after;
 
+    @FindBy(xpath = "//input[@data-related-field='occurrences']")
+    public WebElement occurences;
+
     @FindBy(xpath = "(//input[@type='radio'])[5]")
     public WebElement by;
 
@@ -68,8 +71,40 @@ public class CreateCalendarEventsPage extends BasePage {
     @FindBy(xpath = "//div//label[@for='recurrence-repeat-view1196'")
     public WebElement repeat2;
 
-    @FindBy(id = "recurrence-repeats-view1196")
+    @FindBy(xpath = "//select[@id='recurrence-repeats-view524']")
     public WebElement daily;
+
+    @FindBy(xpath = "//label//input[@checked='checked']")
+    public WebElement RepeatEveryDay;
+
+    @FindBy(xpath = "//div[@class='control-group recurrence-summary alert-info']")
+    public WebElement Summary;
+
+    @FindBy(xpath = "(//input[@placeholder='Choose a date'])[3]")
+    public WebElement ChooseDate;
+
+
+    @FindBy(xpath = "//*[.=', end after 10 occurrences']")
+    public WebElement occuncesTen;
+
+    @FindBy(xpath = "//select[@data-handler='selectYear']")
+    public WebElement YearPick;
+
+    @FindBy(xpath = "//select[@data-handler='selectMonth']")
+    public WebElement MonthPick;
+
+    @FindBy(xpath = "//tr[3]//td[5]")
+    public WebElement DayPick;
+
+    @FindBy(xpath = "(//label//input[@type='checkbox'])[2]")
+    public WebElement MondayPick;
+
+    @FindBy(xpath = "(//label//input[@type='checkbox'])[6]")
+    public WebElement FridayPick;
+
+
+
+
 
 
     public Select repeatOptionsList(){
