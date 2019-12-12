@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Test4 running collection" verbose="1">
+
+ <test name="VytrackCalendar/Event page">
+ <classes>
+     <class name="com.cybertek.tests.TestCase4"></class>
+ </classes>
+</test>
+</suite>
+
+
